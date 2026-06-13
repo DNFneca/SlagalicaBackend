@@ -6,7 +6,7 @@ COPY build.gradle settings.gradle ./
 COPY gradle ./gradle
 COPY src ./src
 
-RUN gradle clean bootJar --no-daemon
+RUN ./gradlew clean bootJar --no-daemon
 
 # Runtime stage
 FROM eclipse-temurin:21-jre
