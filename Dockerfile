@@ -1,14 +1,11 @@
-# Build stage
-FROM gradle:8.8-jdk21 AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-COPY build.gradle settings.gradle ./
-COPY gradle ./gradle
-COPY src ./src
+COPY . .
 
-RUN ./gradlew clean bootJar --no-daemon
+RUN chmod +x gradlew
+RUN ./gradlew clean bootJar -x test --no-daemon
 
-# Runtime stage
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
