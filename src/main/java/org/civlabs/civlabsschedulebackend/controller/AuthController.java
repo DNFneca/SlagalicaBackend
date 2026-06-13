@@ -63,7 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/google")
-    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.66:4200"})
+    @CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.66:4200", "https://rec-exactly-frederick-org.trycloudflare.com"})
     public ResponseEntity<?> loginWithGoogle(
             @RequestBody GoogleAuthRequest request,
             HttpServletResponse response
@@ -87,15 +87,16 @@ public class AuthController {
 
                 return ResponseEntity.ok().build();
             }
+            System.out.println("No user present");
             Set<String> roles = new HashSet<>();
             roles.add("USER");
 
-            userService.createUserWithGoogle(
+            System.out.println(userService.createUserWithGoogle(
                     (String) googlePayload.get("name"),
                     email,
                     googlePayload.getSubject(),
                     roles
-            );
+            ));
 
             String accessToken = jwtService.generateAccessToken((String) googlePayload.get("name"));
             String refreshToken = jwtService.generateRefreshToken((String) googlePayload.get("name"));
@@ -105,10 +106,9 @@ public class AuthController {
             authService.addAccessToken(response, accessToken);
             authService.addRefreshToken(response, refreshToken);
 
-            return ResponseEntity.status(401).body("Invalid Google Token");
-
-
+            return ResponseEntity.ok().build();
         } catch (GeneralSecurityException | IOException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(401).body("Invalid Google Token");
         }
     }

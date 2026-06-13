@@ -129,7 +129,7 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElse(null);
     }
 
     @Transactional(readOnly = true)
